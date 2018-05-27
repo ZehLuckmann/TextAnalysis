@@ -1,0 +1,5 @@
+matplotlib
+nltk
+flask
+sqlalchemy
+flask-sqlalchemy

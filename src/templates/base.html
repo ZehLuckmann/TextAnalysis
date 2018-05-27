@@ -1,0 +1,20 @@
+<html>
+  <head>
+    <script src="{{ url_for('static', filename='js/chart/RGraph.common.core.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/chart/RGraph.hbar.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  </head>
+  <body>
+  <div id="container">
+    <form action="{{url_for('analyze')}}" method="post" enctype="multipart/form-data">
+        <input type="file" name="entrada" id="entrada">
+        <label for="number">Número de palavras</label>
+        <input type="text" name="number" id="number" value="20">
+        <input type="submit" value="Analisar">
+    </form>
+    <hr>
+    {% block content %}{% endblock %}
+  </div>
+  {% block scripts %}{% endblock %}
+  </body>
+</html

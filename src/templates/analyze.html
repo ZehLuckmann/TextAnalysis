@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- CHART -->
+<div id="errors">
+  {% for erro in errors %}
+    <h2>{{ erro }}</h2>
+  {% endfor%}
+</div>
+<div id="detail">
+  <h1>Arquivo: {{file_title}}
+</div>
+<!-- CHART -->
+<div id="chart">
+    <canvas id="cvs" width="700" height="{{height}}">[No canvas support]</canvas>
+</div>
+<!-- TABLE -->
+<div id="table">
+    <table border = "1">
+      <thead>
+        <tr>
+          <th>Palavra</th>
+          <th>Frequência</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for word in words_frequencies %}
+          <tr>
+            <td>{{ word.word }}</td>
+            <td>{{ word.frequency }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+</div>
+{% endblock %}
+{% block scripts %}
+<!-- SCRIPTS -->
+<script>
+    new RGraph.HBar({
+        id: 'cvs',
+        data: [
+          {% for word in words_frequencies%}
+            {{word.frequency}},
+          {% endfor %}
+        ],
+        options: {
+            labels: [
+                {% for word in words_frequencies%}
+                  "{{word.word}}",
+                {% endfor %}
+            ],
+            gutterLeftAutosize: true,
+            scaleZerostart: true,
+            textAccessible: true,
+        }
+    }).draw();
+</script>
+{% endblock %}

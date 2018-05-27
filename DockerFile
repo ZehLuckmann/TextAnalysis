@@ -1,0 +1,35 @@
+############################################################
+# Dockerfile para ralizar o build da aplicação Roger
+# Baseda em uma distro do ubuntu
+# Execute para realizar o build:
+#   sudo docker build -t ancon_img --file ./DockerFile .
+#
+# Para realizar os testes no ambiente de desenvolvimento execute
+# os seguintes comando dentro da pasta /src do projeto:
+#   sudo docker run -d -it --name ancon-desenv -v `pwd`:/src ancon_img
+#   docker exec -it roger-desenv bash
+#
+# Para finalizar o container execute:
+#   docker kill ancon-desenv bash
+############################################################
+
+# Define a imagem base
+FROM python
+
+#Autor/Maintainer
+MAINTAINER José Henrique Luckmann
+
+# Copy the application folder inside the container
+ADD /src /src
+ADD requeriments.txt /
+ADD install.py /
+
+# Get pip to download and install requirements:
+RUN pip install -r requeriments.txt
+RUN python install.py
+
+# Expose ports
+EXPOSE 8080
+
+# Set the default directory where CMD will execute
+WORKDIR /src
