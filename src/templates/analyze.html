@@ -1,37 +1,48 @@
 {% extends "base.html" %}
 {% block content %}
-<!-- CHART -->
-<div id="errors">
-  {% for erro in errors %}
-    <h2>{{ erro }}</h2>
-  {% endfor%}
+<div>
+ <button onclick="openTab('barchart_tab')">Barchart</button>
+ <button onclick="openTab('wordcloud_tab')">Word Cloud</button>
 </div>
-<div id="detail">
-  <h1>Arquivo: {{file_title}}
-</div>
-<!-- CHART -->
-<div id="chart">
-    <canvas id="cvs" width="700" height="{{height}}">[No canvas support]</canvas>
-</div>
-<!-- TABLE -->
-<div id="table">
-    <table border = "1">
-      <thead>
-        <tr>
-          <th>Palavra</th>
-          <th>Frequência</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for word in words_frequencies %}
+
+<div id="barchart_tab" class="tab">
+  <!-- CHART -->
+  <div id="errors">
+    {% for erro in errors %}
+      <h2>{{ erro }}</h2>
+    {% endfor%}
+  </div>
+  <div id="detail">
+    <h1>Arquivo: {{file_title}}
+  </div>
+  <!-- CHART -->
+  <div id="chart">
+      <canvas id="cvs" width="700" height="{{height}}">[No canvas support]</canvas>
+  </div>
+  <!-- TABLE -->
+  <div id="table">
+      <table border = "1">
+        <thead>
           <tr>
-            <td>{{ word.word }}</td>
-            <td>{{ word.frequency }}</td>
+            <th>Palavra</th>
+            <th>Frequência</th>
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {% for word in words_frequencies %}
+            <tr>
+              <td>{{ word.word }}</td>
+              <td>{{ word.frequency }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+  </div>
 </div>
+<div id="wordcloud_tab" class="tab" style="display:none">
+  <div id="wordcloud"></div>
+</div>
+
 {% endblock %}
 {% block scripts %}
 <!-- SCRIPTS -->
@@ -54,5 +65,23 @@
             textAccessible: true,
         }
     }).draw();
+
+    d3.wordcloud()
+    .size([800, 400])
+    .selector('#wordcloud')
+    .words([
+      {% for word in words_frequencies%}
+        {text: "{{word.word}}", size: {{word.frequency}} },
+      {% endfor %}
+      ]).start();
+
+    function openTab(tabName) {
+      var i;
+      var x = document.getElementsByClassName("tab");
+      for (i = 0; i < x.length; i++) {
+          x[i].style.display = "none";
+      }
+      document.getElementById(tabName).style.display = "block";
+    }
 </script>
 {% endblock %}
